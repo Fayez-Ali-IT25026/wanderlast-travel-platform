@@ -7,7 +7,7 @@ const links = [
   { label: "Home", href: "/" },
   { label: "Destinations", href: "/destinations" },
   { label: "My Bookings", href: "/bookings" },
-  { label: "Admin", href: "/admin" },
+  { label: "Add Destination", href: "/add-destination" },
 ];
 
 const Navbar = () => {

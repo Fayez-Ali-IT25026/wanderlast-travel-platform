@@ -139,7 +139,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 flex items-center justify-between border-t border-white/10 pt-5 text-[10px] text-white/60">
-          <p>© {new Date().getFullYear()} Wanderlast. All rights reserved.</p>
+          <p>© 2026 Wanderlast. All rights reserved.</p>
           <div className="flex items-center gap-4 text-white">
             {socials.map((social) => (
               <a
