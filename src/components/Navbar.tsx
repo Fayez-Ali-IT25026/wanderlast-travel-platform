@@ -1,7 +1,22 @@
+"use client";
+
 
 import Image from "next/image";
 import Link from "next/link";
 import { User } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+
 
 const links = [
   { label: "Home", href: "/" },
@@ -11,6 +26,25 @@ const links = [
 ];
 
 const Navbar = () => {
+
+
+const handeleSignOut = () => {
+
+authClient.signOut();
+
+}
+
+
+
+
+   const { 
+        data: session, 
+       
+    } = authClient.useSession() 
+
+const user = session?.user
+
+
   return (
     <header className="absolute inset-x-0 top-0 z-20 bg-white shadow-sm">
       <div className="relative mx-auto flex h-14 max-w-[1440px] items-center justify-between px-5 lg:px-16">
@@ -46,19 +80,49 @@ const Navbar = () => {
         </Link>
 
         <div className="flex items-center gap-5 text-sm text-zinc-800">
-          <Link
+          {/* <Link
             href="/profile"
             className="hidden items-center gap-1.5 hover:text-[#1d9fc2] sm:flex"
           >
             <User className="size-4" />
             Profile
-          </Link>
-          <Link href="/login" className="hover:text-[#1d9fc2]">
+          </Link> */}
+
+
+
+
+{
+  user?<Popover>
+        <PopoverTrigger render={<Avatar>
+  <AvatarImage src={user?.image as string}   referrerPolicy="no-referrer" />
+  <AvatarFallback>{user?.name.charAt(0)}</AvatarFallback>
+</Avatar>} />
+        <PopoverContent align="start">
+          <PopoverHeader>
+            <PopoverTitle>{user?.name}</PopoverTitle>
+            <PopoverDescription>
+             {user?.email}<br/>
+             <Button variant={'destructive'} onClick={handeleSignOut }>Sign Out</Button>
+            </PopoverDescription>
+          </PopoverHeader>
+        </PopoverContent>
+      </Popover>:<>
+       <Link href="/signin" className="hover:text-[#1d9fc2]">
             Login
           </Link>
           <Link href="/signup" className="font-medium hover:text-[#1d9fc2]">
             Sign Up
           </Link>
+      
+      
+      </>
+
+
+
+}
+
+
+         
         </div>
       </div>
     </header>
