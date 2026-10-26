@@ -15,6 +15,7 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import DestinationActions from "@/components/DestinationActions";
+import BookingCard from "@/components/booking/BookingCard";
 
 const DestinationDetail = async ({ id }: { id: string }) => {
   const res = await fetch(`http://localhost:8000/destination/${id}`);
@@ -110,36 +111,7 @@ const DestinationDetail = async ({ id }: { id: string }) => {
           </div>
 
           {/* Right: sticky price card */}
-          <div>
-            <Card className="sticky top-6 border-zinc-200 bg-white p-6 shadow-sm">
-              <p className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-400">
-                Starting from
-              </p>
-
-              <p className="mt-2 text-4xl font-bold tracking-tight text-zinc-900">
-                ${Number(result.price).toLocaleString()}
-              </p>
-              <p className="text-sm text-zinc-500">per person</p>
-
-              <Separator className="my-5 bg-zinc-100" />
-
-              <div className="space-y-3 text-sm text-zinc-600">
-                <p className="flex items-center gap-2.5">
-                  <CalendarDays className="size-4 text-[#1d9fc2]" />
-                  Departs {result.departureDate}
-                </p>
-                <p className="flex items-center gap-2.5">
-                  <Clock className="size-4 text-[#1d9fc2]" />
-                  {result.duration}
-                </p>
-              </div>
-
-              <Button className="mt-5 h-11 w-full gap-2 bg-[#1d9fc2] text-sm font-semibold hover:bg-[#1789a8]">
-                Book Now
-                <ArrowRight />
-              </Button>
-            </Card>
-          </div>
+         <BookingCard result={result}/>
         </div>
       </div>
     </div>

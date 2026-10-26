@@ -49,7 +49,7 @@ const response = await fetch("http://localhost:8000/add-destination",{
       "Content-Type": "application/json",
     },
     // body: JSON.stringify(data),
-     body: JSON.stringify(data),
+     body: JSON.stringify({ ...data, category }),
     
    });
 

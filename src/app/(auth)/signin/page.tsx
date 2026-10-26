@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 
@@ -32,11 +33,14 @@ import { authClient } from "@/lib/auth-client";
  const SigninForm = () => {
 const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
 
 
 const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); 
+    setError(null);
 const { data, error } = await authClient.signIn.email({
     email: email,
     password: password,
@@ -44,6 +48,12 @@ const { data, error } = await authClient.signIn.email({
     callbackURL: "/"
 })
 console.log(data);  
+if (error) {
+  setError(error.message ?? "Invalid email or password");
+  return;
+}
+router.push("/");
+router.refresh();
 };
 
 
@@ -169,6 +179,12 @@ console.log(data);
               </Field>
 
               <Field>
+                {error && (
+                  <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600">
+                    {error}
+                  </p>
+                )}
+
                 <Button
                   type="submit"
                   className="h-11 w-full rounded-xl bg-sky-500 font-semibold text-white shadow-sm shadow-sky-200 transition-colors hover:bg-sky-600"

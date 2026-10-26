@@ -4,6 +4,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -28,9 +29,13 @@ const links = [
 const Navbar = () => {
 
 
-const handeleSignOut = () => {
+const router = useRouter();
 
-authClient.signOut();
+
+const handleSignOut = async () => {
+
+await authClient.signOut();
+router.refresh();
 
 }
 
@@ -102,7 +107,7 @@ const user = session?.user
             <PopoverTitle>{user?.name}</PopoverTitle>
             <PopoverDescription>
              {user?.email}<br/>
-             <Button variant={'destructive'} onClick={handeleSignOut }>Sign Out</Button>
+             <Button variant={'destructive'} onClick={handleSignOut }>Sign Out</Button>
             </PopoverDescription>
           </PopoverHeader>
         </PopoverContent>
