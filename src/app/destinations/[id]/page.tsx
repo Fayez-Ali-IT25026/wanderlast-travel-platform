@@ -18,7 +18,11 @@ import DestinationActions from "@/components/DestinationActions";
 import BookingCard from "@/components/booking/BookingCard";
 
 const DestinationDetail = async ({ id }: { id: string }) => {
-  const res = await fetch(`http://localhost:8000/destination/${id}`);
+  const res = await fetch(`http://localhost:8000/destination/${id}`,{
+    headers: {
+      authorization: 'user in'
+    }
+  });
   const result = await res.json();
 
   return (
