@@ -24,7 +24,7 @@ const MyBookingCard = ({ booking }: { booking: Booking }) => {
   const handleCancel = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8000/my-booking/${_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/my-booking/${_id}`,
         {
           method: "DELETE",
         }

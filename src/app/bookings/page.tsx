@@ -15,7 +15,7 @@ const getBookings = async (): Promise<Booking[]> => {
     const email = session?.user?.email;
     if (!email) redirect("/signin");
 
-    const res = await fetch(`http://localhost:8000/my-booking/${encodeURIComponent(email)}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/my-booking/${encodeURIComponent(email)}`, {
         cache: "no-store",
     });
     if (!res.ok) throw new Error("Failed to fetch bookings");

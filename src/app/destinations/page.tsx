@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Destination } from "@/data/destinations";
 
 const getDestinations = async (): Promise<Destination[]> => {
-  const res = await fetch("http://localhost:8000/destination", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/destination`, {
     cache: "no-store",
   });
   if (!res.ok) throw new Error("Failed to fetch destinations");
@@ -54,7 +54,9 @@ const DestinationsSkeleton = () => (
 
 const DestinationsPage = () => {
   return (
-    <main className="relative" mt-5 >
+    // CHANGED (2026-10-30): `mt-5` was a bare JSX attribute, which React tried to render as an
+    // actual mt-5="true" DOM attribute (console warning). It belongs in className.
+    <main className="relative mt-5" >
       <Suspense fallback={<DestinationsSkeleton />}>
         <DestinationResults />
       </Suspense>

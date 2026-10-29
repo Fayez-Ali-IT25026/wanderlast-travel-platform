@@ -14,6 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { authClient } from "@/lib/auth-client";
+import gettokenfromclient from "@/lib/gettokenfromclient";
 
 const categories = [
   "Beach",
@@ -34,22 +36,28 @@ const AddPackageForm = () => {
 
   const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+// const { data, error } = await authClient.token()
 
-    const data = Object.fromEntries(
+// const token = data?.token
+
+const token = await gettokenfromclient();
+
+    const result= Object.fromEntries(
       new FormData(e.currentTarget)
     );
 
 
 
 
-const response = await fetch("http://localhost:8000/add-destination",{
+const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-destination`,{
     // method ='post'
     method :'post',
     headers: {
       "Content-Type": "application/json",
+       authorization: `bearer ${token}`
     },
     // body: JSON.stringify(data),
-     body: JSON.stringify({ ...data, category }),
+     body: JSON.stringify({ ...result, category }),
     
    });
 
@@ -61,7 +69,7 @@ const response = await fetch("http://localhost:8000/add-destination",{
 
 
     // TODO: send `data` to your API
-    console.log({ ...data, category });
+    console.log({ ...result, category });
   };
 
   return (

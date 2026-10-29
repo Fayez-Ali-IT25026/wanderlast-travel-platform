@@ -98,7 +98,8 @@ const user = session?.user
 
 {
   user?<Popover>
-        <PopoverTrigger render={<Avatar>
+        {/* CHANGED (2026-10-30): nativeButton={false} — the trigger renders an <Avatar> (a div), not a native <button>, so Base UI warned that native button semantics were lost ("A component that acts as a button expected a native <button>..."). */}
+        <PopoverTrigger nativeButton={false} render={<Avatar>
   <AvatarImage src={user?.image as string}   referrerPolicy="no-referrer" />
   <AvatarFallback>{user?.name.charAt(0)}</AvatarFallback>
 </Avatar>} />

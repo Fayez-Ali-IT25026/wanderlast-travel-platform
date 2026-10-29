@@ -26,6 +26,15 @@ const handleBooking = async(e: React.FormEvent<HTMLFormElement>) => {
     return;
   }
 
+  // CHANGED (2026-10-30): strip the destination's `_id` before sending. The old `...result`
+  // spread leaked the destination's `_id` into the booking document, so `insertOne` reused it as
+  // the booking's own `_id` — booking the same destination twice then hit Mongo E11000
+  // (duplicate key), Express 5 answered with an HTML error page, and `response.json()` on it
+  // threw the console error: Unexpected token '<', "<!DOCTYPE "... is not valid JSON.
+  // The reference is kept as `destinationId` (as in your commented-out line below); Mongo now
+  // assigns a fresh ObjectId, which also makes DELETE /my-booking/:id work (it queries an ObjectId).
+  const { _id: destinationId, ...destinationData } = result;
+
   const bookingData = {
     username: user.name,
     email: user.email,
@@ -35,7 +44,8 @@ const handleBooking = async(e: React.FormEvent<HTMLFormElement>) => {
     // departureDate: result.departureDate,
     // duration: result.duration,
     // price: result.price,
-  ...result,
+    destinationId,
+    ...destinationData,
 
 
 
@@ -44,7 +54,7 @@ const handleBooking = async(e: React.FormEvent<HTMLFormElement>) => {
      bookingDate : new Date()
   };
 
-const response = await fetch("http://localhost:8000/booking",{
+const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}0/booking`,{
     // method ='post'
     method :'post',
     headers: {
@@ -54,6 +64,14 @@ const response = await fetch("http://localhost:8000/booking",{
      body: JSON.stringify(bookingData),
     
    });
+
+// CHANGED (2026-10-30): check response.ok before parsing. On failure the Express backend
+// replies with an HTML error page, and `.json()` on that produced the console error
+// "Unexpected token '<', "<!DOCTYPE "... is not valid JSON".
+if (!response.ok) {
+  console.error("Booking failed with status", response.status);
+  return;
+}
 
 const resultdata = await response.json()
   console.log('response from server',resultdata)

@@ -4,7 +4,7 @@ import EditDestinationForm from "./EditForm";
 import type { Destination } from "@/data/destinations";
 
 const getDestination = async (id: string): Promise<Destination> => {
-  const res = await fetch(`http://localhost:8000/destination/${id}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/destination/${id}`);
   if (!res.ok) throw new Error("Failed to load destination");
   return res.json();
 };

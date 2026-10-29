@@ -16,13 +16,41 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import DestinationActions from "@/components/DestinationActions";
 import BookingCard from "@/components/booking/BookingCard";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import gettokenfromserver from "@/lib/gettokenfromserver";
+
+
+
+
+// todo : const jwrToken = await auth.api.getToken({ headers :await headers()})     xxxxxxxxx     wrong
+
+
 
 const DestinationDetail = async ({ id }: { id: string }) => {
-  const res = await fetch(`http://localhost:8000/destination/${id}`,{
+
+
+// const jwrToken = await auth.api.getToken({ headers :await headers()})
+// console.log(jwrToken?.token)
+
+
+// const token = jwrToken?.token
+
+
+const token = await gettokenfromserver()
+
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/destination/${id}`,{
     headers: {
-      authorization: 'user in'
+      // authorization: 'user in'
+      // authorization: jwrToken?.token
+      authorization: `bearer ${token}`
     }
   });
+  // CHANGED (2026-10-30): guard before parsing (same as the other pages) — a non-JSON reply
+  // (HTML error/404 page) would otherwise throw the cryptic
+  // "Unexpected token '<', "<!DOCTYPE "... is not valid JSON" error instead of a clean message.
+  if (!res.ok) throw new Error(`Failed to load destination (${res.status})`);
   const result = await res.json();
 
   return (

@@ -53,7 +53,7 @@ const EditDestinationForm = ({ destination }: EditFormProps) => {
     const body = JSON.stringify({ ...data, category });
 
     const res = await fetch(
-      `http://localhost:8000/destination/${destination._id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/destination/${destination._id}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
