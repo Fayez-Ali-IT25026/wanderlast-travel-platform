@@ -11,8 +11,8 @@ const josefinSans = Josefin_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "My Next App",
-  description: "My Next.js application",
+  title: "wanderlast-travel-platform ",
+  description: "wanderlast-travel-platform ",
 };
 
 export default function RootLayout({
